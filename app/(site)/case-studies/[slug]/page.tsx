@@ -33,7 +33,7 @@ export default async function CaseStudy({ params }: Props) {
   const next = projects[(i + 1) % projects.length];
   const related = projects.filter((x) => x.sector === p.sector && x.slug !== p.slug).slice(0, 3);
   const host = p.url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nikhilpadwal.com";
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",

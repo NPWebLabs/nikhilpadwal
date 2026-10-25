@@ -11,7 +11,7 @@ export const revalidate = 300;
 
 export default async function Home() {
   const posts = await getPublishedPosts(3);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nikhilpadwal.com";
   const platforms = new Set(projects.map((p) => p.platform)).size;
 
   const jsonLd = {

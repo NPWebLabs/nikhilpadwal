@@ -31,7 +31,7 @@ export default async function BlogPost({ params }: Props) {
   if (!post) notFound();
   const html = renderMarkdown(post.content);
   const tags = splitTags(post.tags);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nikhilpadwal.com";
   const url = `${siteUrl}/blog/${post.slug}`;
   const jsonLd = {
     "@context": "https://schema.org",

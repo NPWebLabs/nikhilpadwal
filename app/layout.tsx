@@ -6,7 +6,7 @@ import "@fontsource/instrument-serif/400-italic.css";
 import "./globals.css";
 import { profile } from "@/lib/data";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nikhilpadwal.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
