@@ -24,6 +24,11 @@ export function renderMarkdown(md: string) {
         return { tagName, attribs: external ? { ...attribs, target: "_blank", rel: "noopener noreferrer" } : attribs };
       },
       img: (tagName, attribs) => ({ tagName, attribs: { ...attribs, loading: "lazy" } }),
+      // sanitize-html < 2.18 doesn't scheme-check `poster` (GHSA-vccv-cmxp-4j9h); 2.18 needs Node 22.
+      video: (tagName, attribs) => {
+        const { poster, ...rest } = attribs;
+        return { tagName, attribs: poster && /^(https?:\/\/|\/)/i.test(poster.trim()) ? { ...rest, poster } : rest };
+      },
     },
   });
 }
