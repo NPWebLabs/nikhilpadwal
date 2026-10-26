@@ -5,27 +5,20 @@ import "@fontsource/instrument-serif/400.css";
 import "@fontsource/instrument-serif/400-italic.css";
 import "./globals.css";
 import { profile, SITE_URL } from "@/lib/data";
+import { OG_IMAGE, SITE_NAME } from "@/lib/seo";
 
-const siteUrl = SITE_URL;
-
+// Site-wide defaults only. Canonical, Open Graph URL and Twitter tags are set per page via pageMeta() in lib/seo.ts.
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: { default: `Nik — ${profile.name} | WordPress, Shopify & AI Web Developer`, template: "%s · Nik." },
+  metadataBase: new URL(SITE_URL),
+  title: { default: `${SITE_NAME} | Web Developer in Pune: Web, SaaS & AI`, template: `%s | ${SITE_NAME}` },
   description:
-    "Nikhil Shivaji Padwal (Nik) is a Pune-based WordPress, WooCommerce, Shopify and Next.js developer with 5 years of building fast, SEO-ready websites and stores, now with AI integrations.",
-  keywords: ["WordPress developer Pune", "Shopify developer", "WooCommerce developer", "Next.js developer", "Core Web Vitals", "AI chatbot integration", "Nikhil Padwal"],
-  authors: [{ name: profile.name, url: siteUrl }],
+    "Nikhil Padwal is a Pune-based web developer: web engineering, SaaS development and AI innovation. 5 years and 50+ client websites on WordPress, WooCommerce, Shopify and Next.js.",
+  applicationName: SITE_NAME,
+  authors: [{ name: profile.name, url: SITE_URL }],
   creator: profile.name,
-  openGraph: {
-    type: "website",
-    url: siteUrl,
-    siteName: "Nik.",
-    title: "Nik, explained — WordPress, Shopify & AI web developer",
-    description: profile.intro,
-    images: [{ url: "/images/og.jpg", width: 1200, height: 630, alt: "Nik — web developer" }],
-  },
-  twitter: { card: "summary_large_image", title: "Nik, explained", description: profile.intro, images: ["/images/og.jpg"] },
-  alternates: { canonical: "/" },
+  openGraph: { type: "website", siteName: SITE_NAME, locale: "en_IN", images: [OG_IMAGE] },
+  twitter: { card: "summary_large_image" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = { themeColor: "#f3f3f1", width: "device-width", initialScale: 1 };

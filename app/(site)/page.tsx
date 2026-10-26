@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { profile, projects, experience, education, skills, skillIcons, services, workProcess, SITE_URL } from "@/lib/data";
 import { getPublishedPosts } from "@/lib/posts";
+import { graph, pageMeta, personSchema, websiteSchema, PERSON_ID, WEBSITE_ID } from "@/lib/seo";
 import WorkGrid from "@/components/WorkGrid";
 import BrowserFrame from "@/components/BrowserFrame";
 import PostCard from "@/components/PostCard";
@@ -9,29 +12,25 @@ import { whatsappUrl, WhatsAppIcon } from "@/components/WhatsAppButton";
 
 export const revalidate = 300;
 
+export const metadata: Metadata = pageMeta({
+  description:
+    "Nikhil Padwal is a Pune-based web developer: web engineering, SaaS development and AI innovation. 5 years and 50+ client websites on WordPress, WooCommerce, Shopify and Next.js.",
+  path: "/",
+});
+
 export default async function Home() {
   const posts = await getPublishedPosts(3);
-  const siteUrl = SITE_URL;
   const platforms = new Set(projects.map((p) => p.platform)).size;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: profile.name,
-    alternateName: "Nik",
-    jobTitle: profile.role,
-    email: `mailto:${profile.email}`,
-    url: siteUrl,
-    image: `${siteUrl}/images/nik-hero.webp`,
-    address: { "@type": "PostalAddress", addressLocality: "Pune", addressCountry: "IN" },
-    sameAs: Object.values(profile.socials).map((s) => s.url),
-    knowsAbout: ["WordPress", "WooCommerce", "Shopify", "Next.js", "React", "Technical SEO", "Core Web Vitals", "OpenAI API"],
-    alumniOf: education.map((e) => ({ "@type": "CollegeOrUniversity", name: e.school })),
-  };
+  const jsonLd = graph(
+    websiteSchema(),
+    { ...personSchema(), alumniOf: education.map((e) => ({ "@type": "CollegeOrUniversity", name: e.school })) },
+    { "@type": "ProfilePage", "@id": `${SITE_URL}/#profile`, url: `${SITE_URL}/`, name: "Nikhil Padwal — Web Developer", isPartOf: { "@id": WEBSITE_ID }, mainEntity: { "@id": PERSON_ID } },
+  );
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
 
       {/* ── Hero ─────────────────────────────── */}
       <section className="hero wrap" aria-labelledby="hero-title">
@@ -50,8 +49,7 @@ export default async function Home() {
           </div>
           <figure className="polaroid">
             <span className="tape" aria-hidden="true" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/nik-hero.webp" alt="Nikhil Padwal in a grey suit, working at a laptop" width={1100} height={1366} fetchPriority="high" />
+            <Image src="/images/nik-portrait.webp" alt="Portrait of Nikhil Padwal in an orange sweatshirt" width={1100} height={1473} priority sizes="(max-width: 860px) 72vw, 440px" />
             <figcaption>Nikhil Padwal</figcaption>
             <span className="sticker" aria-hidden="true">
               <span><b>{profile.years}+</b>years<br />shipping</span>
@@ -209,8 +207,7 @@ export default async function Home() {
               <article key={e.school} className="edu reveal">
                 <figure className="edu__photo" style={{ margin: 0 }}>
                   <span className="tape" aria-hidden="true" />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={e.image} alt={`${e.school} campus, ${e.place}`} loading="lazy" />
+                  <Image src={e.image} alt={`${e.school} campus, ${e.place}`} width={800} height={1000} sizes="(max-width: 520px) 260px, 240px" />
                 </figure>
                 <div className="edu__body">
                   <span className="eyebrow">{e.period}</span>

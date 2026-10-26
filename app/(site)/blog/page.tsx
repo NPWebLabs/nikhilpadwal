@@ -2,18 +2,30 @@ import type { Metadata } from "next";
 import { getPublishedPosts } from "@/lib/posts";
 import PostCard from "@/components/PostCard";
 import { profile } from "@/lib/data";
+import { absolute, breadcrumbSchema, graph, pageMeta, PERSON_ID } from "@/lib/seo";
 
 export const revalidate = 300;
-export const metadata: Metadata = {
-  title: "Blog",
-  description: "Notes from client work by Nik: WordPress speed, WooCommerce and Shopify setups, technical SEO and AI integrations.",
-  alternates: { canonical: "/blog" },
-};
+export const metadata: Metadata = pageMeta({
+  title: "Blog: WordPress, Shopify, SEO & AI Notes",
+  description: "Notes from client work by Nikhil Padwal: WordPress speed, WooCommerce and Shopify setups, technical SEO and AI integrations.",
+  path: "/blog",
+});
 
 export default async function BlogIndex() {
   const posts = await getPublishedPosts();
+  const jsonLd = graph(
+    {
+      "@type": "Blog",
+      name: "Notes from the build",
+      url: absolute("/blog"),
+      author: { "@id": PERSON_ID },
+      blogPost: posts.map((p) => ({ "@type": "BlogPosting", headline: p.title, url: absolute(`/blog/${p.slug}`) })),
+    },
+    breadcrumbSchema([{ name: "Blog", path: "/blog" }]),
+  );
   return (
     <div className="wrap">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       <header className="article-head">
         <span className="label">Blog</span>
         <h1>Notes from the build</h1>

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { projects, profile, SITE_URL } from "@/lib/data";
+import { projects, profile } from "@/lib/data";
+import { absolute, breadcrumbSchema, graph, pageMeta, PERSON_ID } from "@/lib/seo";
 import BrowserFrame from "@/components/BrowserFrame";
 import { whatsappUrl, WhatsAppIcon } from "@/components/WhatsAppButton";
 
@@ -18,12 +19,13 @@ const find = async (params: Props["params"]) => {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = await find(params);
   if (!p) return { title: "Case study not found" };
-  return {
-    title: `${p.name} case study`,
+  return pageMeta({
+    title: `${p.name} Case Study`,
     description: p.summary,
-    alternates: { canonical: `/case-studies/${p.slug}` },
-    openGraph: { type: "article", title: `${p.name}: ${p.category} website`, description: p.summary, images: p.image ? [{ url: p.image }] : ["/images/og.jpg"] },
-  };
+    path: `/case-studies/${p.slug}`,
+    image: p.image,
+    type: "article",
+  });
 }
 
 export default async function CaseStudy({ params }: Props) {
@@ -33,21 +35,25 @@ export default async function CaseStudy({ params }: Props) {
   const next = projects[(i + 1) % projects.length];
   const related = projects.filter((x) => x.sector === p.sector && x.slug !== p.slug).slice(0, 3);
   const host = p.url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
-  const siteUrl = SITE_URL;
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    name: `${p.name} website`,
-    abstract: p.summary,
-    url: `${siteUrl}/case-studies/${p.slug}`,
-    image: p.image ? `${siteUrl}${p.image}` : undefined,
-    creator: { "@type": "Person", name: profile.name, url: siteUrl },
-    about: { "@type": "Organization", name: p.name, url: p.url },
-  };
+  const path = `/case-studies/${p.slug}`;
+  const jsonLd = graph(
+    {
+      "@type": "CreativeWork",
+      name: `${p.name} website`,
+      headline: `${p.name} case study`,
+      abstract: p.summary,
+      url: absolute(path),
+      image: p.image ? absolute(p.image) : undefined,
+      creator: { "@type": "Person", "@id": PERSON_ID, name: profile.name },
+      about: { "@type": "Organization", name: p.name, url: p.url },
+      keywords: [p.platform, p.category, p.sector, ...p.highlights].join(", "),
+    },
+    breadcrumbSchema([{ name: "Case studies", path: "/case-studies" }, { name: p.name, path }]),
+  );
 
   return (
     <article style={{ paddingBottom: "clamp(64px, 9vw, 120px)" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       <header className="wrap cs-head">
         <Link href="/case-studies" className="eyebrow" style={{ textDecoration: "none" }}>← All case studies</Link>
         <h1>{p.name}</h1>
@@ -61,7 +67,7 @@ export default async function CaseStudy({ params }: Props) {
       </header>
 
       <div className="wrap cs-shot">
-        <BrowserFrame url={p.url} image={p.image} alt={`${p.name} website homepage, desktop view`} href={p.url} emptyTitle={p.name} priority />
+        <BrowserFrame url={p.url} image={p.image} alt={`${p.name} website homepage, desktop view`} href={p.url} emptyTitle={p.name} priority sizes="(max-width: 1300px) 100vw, 1240px" />
       </div>
 
       <div className="wrap cs-body">

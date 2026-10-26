@@ -1,6 +1,8 @@
-type Props = { url: string; image?: string; alt: string; href?: string; emptyTitle?: string; priority?: boolean };
+import Image from "next/image";
 
-export default function BrowserFrame({ url, image, alt, href, emptyTitle, priority }: Props) {
+type Props = { url: string; image?: string; alt: string; href?: string; emptyTitle?: string; priority?: boolean; sizes?: string };
+
+export default function BrowserFrame({ url, image, alt, href, emptyTitle, priority, sizes = "(max-width: 860px) 100vw, 50vw" }: Props) {
   const host = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
   const inner = (
     <>
@@ -10,8 +12,7 @@ export default function BrowserFrame({ url, image, alt, href, emptyTitle, priori
       </div>
       <div className="browser__screen">
         {image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={image} alt={alt} loading={priority ? "eager" : "lazy"} decoding="async" width={1440} height={900} />
+          <Image src={image} alt={alt} width={1440} height={900} sizes={sizes} priority={priority} />
         ) : (
           <div className="browser__empty">
             <div>

@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: { unoptimized: true },
+  // Images go through the Next.js optimizer (sharp): resized per device and served as WebP.
+  images: { formats: ["image/webp"], minimumCacheTTL: 2678400 },
   poweredByHeader: false,
   devIndicators: false,
   // Hostinger builds Next.js in standalone mode automatically; set STANDALONE=1 to test that locally.
