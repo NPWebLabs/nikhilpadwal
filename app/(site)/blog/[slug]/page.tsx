@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPublishedPost, formatDate, splitTags } from "@/lib/posts";
 import { renderMarkdown } from "@/lib/markdown";
-import { profile } from "@/lib/data";
+import { profile, SITE_URL } from "@/lib/data";
 
 export const revalidate = 300;
 type Props = { params: Promise<{ slug: string }> };
@@ -31,7 +31,7 @@ export default async function BlogPost({ params }: Props) {
   if (!post) notFound();
   const html = renderMarkdown(post.content);
   const tags = splitTags(post.tags);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nikhilpadwal.com";
+  const siteUrl = SITE_URL;
   const url = `${siteUrl}/blog/${post.slug}`;
   const jsonLd = {
     "@context": "https://schema.org",

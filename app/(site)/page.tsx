@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { profile, projects, experience, education, skills, skillIcons, services, workProcess } from "@/lib/data";
+import { profile, projects, experience, education, skills, skillIcons, services, workProcess, SITE_URL } from "@/lib/data";
 import { getPublishedPosts } from "@/lib/posts";
 import WorkGrid from "@/components/WorkGrid";
 import BrowserFrame from "@/components/BrowserFrame";
@@ -11,7 +11,7 @@ export const revalidate = 300;
 
 export default async function Home() {
   const posts = await getPublishedPosts(3);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nikhilpadwal.com";
+  const siteUrl = SITE_URL;
   const platforms = new Set(projects.map((p) => p.platform)).size;
 
   const jsonLd = {
@@ -22,7 +22,7 @@ export default async function Home() {
     jobTitle: profile.role,
     email: `mailto:${profile.email}`,
     url: siteUrl,
-    image: `${siteUrl}/images/nik-portrait.webp`,
+    image: `${siteUrl}/images/nik-hero.webp`,
     address: { "@type": "PostalAddress", addressLocality: "Pune", addressCountry: "IN" },
     sameAs: Object.values(profile.socials).map((s) => s.url),
     knowsAbout: ["WordPress", "WooCommerce", "Shopify", "Next.js", "React", "Technical SEO", "Core Web Vitals", "OpenAI API"],
@@ -51,7 +51,7 @@ export default async function Home() {
           <figure className="polaroid">
             <span className="tape" aria-hidden="true" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/nik-portrait.webp" alt="Portrait of Nikhil Padwal in an orange sweatshirt" width={1100} height={1473} fetchPriority="high" />
+            <img src="/images/nik-hero.webp" alt="Nikhil Padwal in a grey suit, working at a laptop" width={1100} height={1366} fetchPriority="high" />
             <figcaption>Nikhil Padwal</figcaption>
             <span className="sticker" aria-hidden="true">
               <span><b>{profile.years}+</b>years<br />shipping</span>

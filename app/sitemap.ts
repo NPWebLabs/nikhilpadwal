@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/data";
 import { getPublishedPosts } from "@/lib/posts";
 import { projects } from "@/lib/projects";
 
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://nikhilpadwal.com";
+  const base = SITE_URL;
   const posts = await getPublishedPosts();
   return [
     { url: `${base}/`, changeFrequency: "monthly", priority: 1 },

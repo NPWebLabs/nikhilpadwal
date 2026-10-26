@@ -1,11 +1,11 @@
-import { profile, projects, sectors, services, skills } from "@/lib/data";
+import { profile, projects, sectors, services, skills, SITE_URL } from "@/lib/data";
 import { getPublishedPosts } from "@/lib/posts";
 
 // /llms.txt — a plain-markdown site summary for AI assistants (https://llmstxt.org). Built from the same data as the site.
 export const revalidate = 3600;
 
 export async function GET() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://nikhilpadwal.com";
+  const base = SITE_URL;
   const host = base.replace(/^https?:\/\//, "").replace(/\/$/, "");
   const posts = await getPublishedPosts();
   const socials = Object.values(profile.socials);

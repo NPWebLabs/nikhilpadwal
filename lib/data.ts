@@ -185,3 +185,6 @@ export const nav = [
   { href: "/blog", label: "Blog" },
   { href: "/#contact", label: "Contact" },
 ];
+
+// Public site address with no trailing slash, so `${SITE_URL}/path` never produces "//".
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://nikhilpadwal.com").trim().replace(/\/+$/, "");

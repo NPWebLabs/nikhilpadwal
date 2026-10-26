@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { projects, profile } from "@/lib/data";
+import { projects, profile, SITE_URL } from "@/lib/data";
 import BrowserFrame from "@/components/BrowserFrame";
 import { whatsappUrl, WhatsAppIcon } from "@/components/WhatsAppButton";
 
@@ -33,7 +33,7 @@ export default async function CaseStudy({ params }: Props) {
   const next = projects[(i + 1) % projects.length];
   const related = projects.filter((x) => x.sector === p.sector && x.slug !== p.slug).slice(0, 3);
   const host = p.url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nikhilpadwal.com";
+  const siteUrl = SITE_URL;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
