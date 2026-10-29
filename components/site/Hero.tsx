@@ -6,8 +6,8 @@ import { motion, useReducedMotion, useScroll, type Transition } from "motion/rea
 import { profile, whatsappUrl } from "@/lib/data";
 import { Arrow, Ico } from "./ui";
 
-// Runs while the HTML is parsed, before first paint: decides whether the intro video plays (once per session).
-const INTRO_JS = `try{var d=document.documentElement,v=document.createElement('video');if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!sessionStorage.getItem('nikIntro')&&(v.canPlayType('video/mp4')||v.canPlayType('video/webm')))d.classList.add('is-intro')}catch(e){}`;
+// Runs while the HTML is parsed, before first paint: decides whether the intro video plays (every load, as in the original page).
+const INTRO_JS = `try{var d=document.documentElement,v=document.createElement('video');if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&(v.canPlayType('video/mp4')||v.canPlayType('video/webm')))d.classList.add('is-intro')}catch(e){}`;
 
 // Where the cut-out photo sits in the last video frame (1280×720): 440×576 at (432, 32).
 const CX = 432, CY = 32, CH = 576;
@@ -30,7 +30,6 @@ export default function Hero({ shots }: { shots: string[] }) {
   const finish = useCallback((skipped: boolean) => {
     if (done.current) return;
     done.current = true;
-    try { sessionStorage.setItem("nikIntro", "1"); } catch {}
     document.documentElement.classList.remove("is-intro");
     if (!skipped) setFlash(true);
     setPhase("done");
@@ -116,7 +115,7 @@ export default function Hero({ shots }: { shots: string[] }) {
           </video>
           <div className="fade" />
           <div className="bar" ref={barRef} />
-          <button className="skip" type="button" onClick={() => { vidRef.current?.pause(); finish(true); }}>SKIP INTRO</button>
+          <button className="skip glass" data-glass type="button" onClick={() => { vidRef.current?.pause(); finish(true); }}>SKIP INTRO</button>
         </div>
       )}
 
@@ -136,44 +135,48 @@ export default function Hero({ shots }: { shots: string[] }) {
         </div>
       </motion.div>
 
+      <motion.div
+        className="hero-badge glass"
+        data-glass
+        aria-hidden="true"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={show ? { opacity: 1, scale: 1 } : undefined}
+        transition={{ delay: 1.1, type: "spring", bounce: 0.35, duration: 0.6 }}
+      >
+        <b>{profile.years}+</b><span>YEARS<br />SHIPPING</span>
+      </motion.div>
+
+      {/* Layout from the original page: centred portrait, copy across the full width underneath. The title (left) and the
+          blurb (right) sit over the faded lower part of the photo and share one bottom edge. */}
       <div className="wrap hero-grid">
-        <div className="hero-copy">
-          <motion.span className="label" {...fade(0.6)}>Web · SaaS · AI</motion.span>
-          <h1 className="serif">
-            {lines.map((l, i) => (
-              <span className="ln" key={l}>
-                <motion.span initial={{ y: "105%" }} animate={show ? { y: "0%" } : undefined} transition={{ duration: 1.1, delay: 0.35 + i * 0.1, ease: EASE }}>
-                  {i === 2 ? <em>{l}</em> : l}
-                </motion.span>
-              </span>
-            ))}
-          </h1>
-          <motion.p className="sub" {...fade(0.68)}>Web engineering, SaaS development, and AI innovation.</motion.p>
-          <motion.div className="cta-row" {...fade(0.76)}>
-            <Link href="/#contact" className="btn"><span className="ic"><Arrow /></span>Contact me</Link>
-            <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="btn ghost wa">
-              <span className="ic"><Ico name="whatsapp-white" size={18} style={{ color: "#fff" }} /></span>WhatsApp
-            </a>
-          </motion.div>
-          <motion.div className="hero-meta" {...fade(0.84)}>
-            <div>
-              <p>{profile.role} at <b>Claidroid</b>. Fast, SEO-ready websites, stores and web apps on <b>WordPress, WooCommerce, Shopify, React and Next.js</b>.</p>
-              <Link href="/case-studies" className="link">See the work ↓</Link>
-            </div>
-            <div className="sig" aria-hidden="true">Nikhil Padwal</div>
-          </motion.div>
+        <div className={`portrait${flash ? " flash" : ""}`}>
+          <Image ref={imgRef} src="/images/nik-cutout.webp" alt="Nikhil Padwal" width={1098} height={1433} priority sizes="(max-width: 760px) 92vw, 500px" />
         </div>
 
-        <div className={`portrait${flash ? " flash" : ""}`}>
-          <Image ref={imgRef} src="/images/nik-cutout.webp" alt="Nikhil Padwal" width={1098} height={1433} priority sizes="(max-width: 760px) 84vw, 470px" />
-          <motion.div
-            className="hero-badge"
-            aria-hidden="true"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={show ? { opacity: 1, scale: 1 } : undefined}
-            transition={{ delay: 1.1, type: "spring", bounce: 0.35, duration: 0.6 }}
-          >
-            <b>{profile.years}+</b><span>YEARS<br />SHIPPING</span>
+        <div className="hero-copy">
+          <div className="hero-main">
+            <h1 className="serif">
+              {lines.map((l, i) => (
+                <span className="ln" key={l}>
+                  <motion.span initial={{ y: "105%" }} animate={show ? { y: "0%" } : undefined} transition={{ duration: 1.1, delay: 0.35 + i * 0.1, ease: EASE }}>
+                    {i === 2 ? <em>{l}</em> : l}
+                  </motion.span>
+                </span>
+              ))}
+            </h1>
+            <motion.p className="sub" {...fade(0.68)}>Web engineering, SaaS development, and AI innovation.</motion.p>
+            <motion.div className="cta-row" {...fade(0.76)}>
+              <Link href="/#contact" className="btn"><span className="ic"><Arrow /></span>Contact me</Link>
+              <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="btn ghost wa glass" data-glass>
+                <span className="ic"><Ico name="whatsapp-white" size={18} style={{ color: "#fff" }} /></span>WhatsApp
+              </a>
+            </motion.div>
+          </div>
+
+          <motion.div className="hero-aside" {...fade(0.84)}>
+            <p>{profile.role} at <b>Claidroid</b>. Fast, SEO-ready websites, stores and web apps on <b>WordPress, WooCommerce, Shopify, React and Next.js</b>.</p>
+            <Link href="/#work" className="link">See the work ↓</Link>
+            <div className="sig" aria-hidden="true">Nikhil Padwal</div>
           </motion.div>
         </div>
       </div>

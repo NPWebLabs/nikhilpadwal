@@ -1,7 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/bodoni-moda/opsz.css";
-import "@fontsource-variable/bodoni-moda/opsz-italic.css";
-import "@fontsource-variable/hanken-grotesk/index.css";
+import "@fontsource-variable/inter/opsz.css";
 import "@fontsource/mrs-saint-delafield/400.css";
 import "./globals.css";
 import { profile, SITE_URL } from "@/lib/data";

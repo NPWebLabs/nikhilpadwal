@@ -44,11 +44,11 @@ export default function Header() {
           <Link href="/" className="logo" aria-label="Nik., home">Nik<i>.</i></Link>
           <div className="meta m1"><small>Status</small><span><i className="live" aria-hidden="true" />Open for projects</span></div>
           <div className="meta m2"><small>Based in</small><span>{profile.location}</span></div>
-          <nav className="links" aria-label="Primary">
+          <nav className="links glass" data-glass aria-label="Primary">
             {nav.map((n) => <Link key={n.href} href={n.href} aria-current={current(n.href)}>{n.label}</Link>)}
           </nav>
-          <Link href="/#contact" className="btn ghost"><span className="ic"><Arrow /></span>Let&apos;s talk</Link>
-          <button className="menu-btn" type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="mobileMenu" onClick={() => setOpen((o) => !o)}>
+          <Link href="/#contact" className="btn ghost glass" data-glass><span className="ic"><Arrow /></span>Let&apos;s talk</Link>
+          <button className="menu-btn glass" data-glass type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="mobileMenu" onClick={() => setOpen((o) => !o)}>
             <span /><span />
           </button>
         </div>

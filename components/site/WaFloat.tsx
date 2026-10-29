@@ -16,7 +16,7 @@ export default function WaFloat() {
   }, []);
   const show = path !== "/" || past;
   return (
-    <a className={`wa-float${show ? "" : " is-hidden"}`} href={whatsappUrl()} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" tabIndex={show ? undefined : -1} aria-hidden={show ? undefined : true}>
+    <a className={`wa-float glass${show ? "" : " is-hidden"}`} href={whatsappUrl()} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" data-glass tabIndex={show ? undefined : -1} aria-hidden={show ? undefined : true}>
       <Ico name="whatsapp-white" />
     </a>
   );

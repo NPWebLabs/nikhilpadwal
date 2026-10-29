@@ -14,8 +14,8 @@
   --blue: #2f50ee;
   --red: #c4321f;
   --green: #1f7a46;
-  --serif: "Bodoni Moda Variable", Didot, Georgia, serif;
-  --sans: "Hanken Grotesk Variable", "Helvetica Neue", Arial, sans-serif;
+  --serif: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter Variable", "Helvetica Neue", Arial, sans-serif;
+  --sans: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter Variable", "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --r: 12px;
   --dur: 180ms;

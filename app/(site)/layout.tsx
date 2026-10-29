@@ -3,6 +3,7 @@ import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
 import Tracker from "@/components/site/Tracker";
 import WaFloat from "@/components/site/WaFloat";
+import LiquidGlass from "@/components/site/LiquidGlass";
 import { getCaseStudies } from "@/lib/caseStudies";
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -16,6 +17,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <Footer caseCount={cases.length} />
       <WaFloat />
       <Tracker />
+      <LiquidGlass />
     </Providers>
   );
 }
